@@ -11,7 +11,38 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="navbar bg-base-100">
+          <a className="btn btn-ghost normal-case text-xl">DaisyUI</a>
+        </div>
+        {children}
+      </body>
     </html>
   );
 }
+
+/* 
+layouts ใน Next.js ถ้าดูที่ไฟล์ '/app/layout.js' มันจะครอบ (wrap) ทุกอย่างในแอปของเราไว้
+
+ไฟล์นี้มี component ชื่อ 'RootLayout' ที่รับ 'children' มาเป็น prop โดย 'children' พวกนี้อาจจะเป็น route หรือเพจที่เราสร้างขึ้น นอกจากนี้ยังมี tag <html> และ <body> อยู่ในไฟล์นี้ด้วย ดังนั้นถ้าอยากให้อะไรแสดงในทุกหน้า เช่น header หรือ footer ก็ให้วางไว้ตรงนี้
+
+ยกตัวอย่างเช่น สมมติว่าเราอยากใส่ navigation bar เราสามารถไปหาที่เหมาะๆ จาก DaisyUI แล้วก็อปโค้ด JSX มาวางไว้เหนือ {children} ใน main layout ได้เลย
+
+ตอนนี้ navigation bar ก็จะไปแสดงอยู่ด้านบนสุดของทุกเพจและทุก route ในแอปเรา
+
+แต่ถ้าต้องการ layout เฉพาะสำหรับบางหน้า เช่นหน้า 'Login' หรือ 'Signup' ที่ไม่อยากให้ header หลักไปแสดง ก็สามารถสร้างไฟล์ 'layout.js' เฉพาะขึ้นมาได้ในโฟลเดอร์ของหน้านั้นๆ ซึ่งเรื่อง layout และ header เราจะย้อนกลับมาดูอีกทีทีหลัง แต่ตอนนี้ก็น่าจะพอเข้าใจภาพรวมของการทำงานของ layout ใน Next.js แล้ว
+
+ไฟล์ `layout.js` ในโฟลเดอร์ `app` จะเป็นเหมือน root layout ที่ครอบทุกอย่างในแอป
+- มีการ import font `Inter` มาใช้
+- ส่วนข้อมูล metadata ของเพจจะประกาศไว้ใน `metadata` 
+- ส่วน layout หลักจะอยู่ใน function component `RootLayout` ที่รับ `children` มาเป็น prop
+- ใน `RootLayout` จะ return JSX ที่มี tag `<html>` และ `<body>` ครอบ component ลูกๆ ทั้งหมด `{children}` เอาไว้
+- กำหนด className ให้กับ `<body>` เพื่อใช้ font ที่ import มา
+
+2. เพิ่ม Navigation Bar 
+เราสามารถเพิ่ม component อะไรก็ได้เข้าไปใน root layout เหนือ `{children}` เช่นในที่นี้เพิ่ม navigation bar เข้ามาโดย:
+- ก๊อปโค้ด JSX ของ navigation bar จาก DaisyUI มาวาง
+- ใส่ class ต่างๆ เพื่อจัดรูปแบบ style ตามที่ DaisyUI กำหนดไว้
+
+การเพิ่ม component ใน root layout แบบนี้ จะทำให้ component นั้นไปแสดงในทุกหน้าของแอป เหมือนเป็นส่วนประกอบหลักที่แชร์กันได้นั่นเอง
+*/
