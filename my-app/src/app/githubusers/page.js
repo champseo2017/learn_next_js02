@@ -8,8 +8,6 @@ const fetchGitHubUsers = async () => {
 
 const GitHubUsersPage = async () => {
   const users = await fetchGitHubUsers();
-  console.log(users);
-
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -42,7 +40,14 @@ const GitHubUsersPage = async () => {
                     View on GitHub
                   </Link>
                 </td>
-                <th>Go to Repos</th>
+                <td>
+                  <Link
+                    href={`/githubusers/${user.login}`}
+                    className="btn btn-link"
+                  >
+                    Go to Repos
+                  </Link>
+                </td>
               </tr>
             ))
           ) : (
