@@ -9,6 +9,7 @@ const fetchGitHubUsers = async () => {
 
 const GitHubUsersPage = async () => {
   const users = await fetchGitHubUsers();
+  console.log("dateeeee", Date.now());
   return (
     <div className="overflow-x-auto">
       <table className="table">

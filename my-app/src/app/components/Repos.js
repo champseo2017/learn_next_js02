@@ -1,13 +1,11 @@
 const fetchRepos = async (user) => {
   const res = await fetch(`https://api.github.com/users/${user}/repos`);
-  await new Promise((resolve) => setTimeout(resolve, 5000));
   const json = await res.json();
   return json;
 };
 
 const Repos = async ({ user }) => {
   const repos = await fetchRepos(user);
-
   return (
     <div>
       <h1>{user}'s Repos</h1>
@@ -20,8 +18,8 @@ const Repos = async ({ user }) => {
             </tr>
           </thead>
           <tbody>
-            {repos.map((repo) => (
-              <tr>
+            {repos.map((repo, index) => (
+              <tr key={index}>
                 <td>{repo.name}</td>
                 <td>{repo.description}</td>
               </tr>
