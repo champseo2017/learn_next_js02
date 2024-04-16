@@ -1,8 +1,9 @@
-async function fetchRepos(user) {
+const fetchRepos = async (user) => {
   const res = await fetch(`https://api.github.com/users/${user}/repos`);
+  await new Promise((resolve) => setTimeout(resolve, 5000));
   const json = await res.json();
   return json;
-}
+};
 
 const Repos = async ({ user }) => {
   const repos = await fetchRepos(user);
