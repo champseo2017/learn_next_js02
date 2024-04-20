@@ -1,5 +1,9 @@
 const fetchRepos = async (user) => {
-  const res = await fetch(`https://api.github.com/users/${user}/repos`);
+  const res = await fetch(`https://api.github.com/users/${user}/repos`, {
+    next: {
+      revalidate: 60, // เพิ่ม revalidate เพื่อบอกให้ cache ข้อมูลเป็นเวลา 60 วินาที
+    },
+  });
   const json = await res.json();
   return json;
 };
