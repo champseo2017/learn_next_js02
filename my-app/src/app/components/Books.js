@@ -9,9 +9,10 @@ const getBooks = async () => {
   return json;
 };
 
-const Books = async () => {
+const Books = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     getBooks().then((books) => {
@@ -24,8 +25,26 @@ const Books = async () => {
     return <LoadingPage />;
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  };
+
+  console.log("loadingloading", loading);
+
   return (
     <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Search Books..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="input input-bordered w-full max-w-xs"
+        />
+        <button type="submit" className="btn btn-primary">
+          Search
+        </button>
+      </form>
       <h1>Books</h1>
       {books.map((book) => (
         <div key={book.id}>
@@ -54,14 +73,10 @@ const Books = async () => {
 export default Books;
 
 /* 
-'use client'
+เราจะทดสอบ form ของเราเพื่อให้แน่ใจว่ามันทำงานถูกต้อง ตอนแรกเมื่อเรารันแอพ ดูเหมือนว่าการอัพเดท state ทุกครั้งจะทำให้เกิดการโหลดหน้าเซิร์ฟเวอร์ ซึ่งเป็นเพราะเราใส่ async ไว้ใน Books component
+แต่ตอนนี้ Books component เป็น client component แล้ว เราจึงไม่จำเป็นต้องใช้ async อีกต่อไป และต้องเอาออก หลังจากนั้น form ของเราควรจะทำงานถูกต้อง เราสามารถลองพิมพ์ query ใน console เพื่อทดสอบได้
 
-- ในไฟล์ `app/components/Books.jsx` เราใช้ 'use client' เพื่อบอก Next.js ว่า Books component เป็น client component
-- Client component คือ component ที่ render และรันที่ฝั่ง client (เบราว์เซอร์) ซึ่งต่างจาก server component ที่รันที่ฝั่ง server
-- เราเลือกใช้ client component เพราะ Books component มีการใช้ state และ effect ผ่าน useState และ useEffect ซึ่งเป็น feature ที่ใช้ได้เฉพาะใน client component เท่านั้น
-- การใช้ 'use client' ทำให้เราสามารถใช้ feature ของ React ที่รันที่ฝั่ง client ได้ เช่น state, effect, event handler เป็นต้น
-- แต่การใช้ client component ก็มีข้อเสียคือ initial rendering จะช้ากว่า server component เพราะต้องรอให้ JavaScript load เสร็จก่อน
-- ดังนั้นเราควรใช้ client component เฉพาะเมื่อจำเป็น เช่น ต้องการใช้ feature ของ React ที่รันที่ฝั่ง client หรือต้องการ interactivity ที่ซับซ้อน
+การกำหนด async ให้กับ component เป็นวิธีการบอก Next.js ว่า component นี้เป็น server component ที่สามารถโหลดข้อมูลแบบ asynchronous ได้
 
-การเลือกใช้ server component หรือ client component ขึ้นอยู่กับความต้องการของแต่ละส่วนในแอพ โดยเราควรใช้ server component ให้มากที่สุดเพื่อให้ initial rendering เร็วขึ้น และใช้ client component เฉพาะเมื่อจำเป็นจริงๆ
+การโหลดข้อมูลแบบ Asynchronous: เมื่อเราใส่ async ไว้ เราสามารถใช้ await ภายใน component เพื่อรอการโหลดข้อมูลแบบ asynchronous เช่น การเรียก API หรือ query database โดยที่ component จะรอจนกว่าข้อมูลจะพร้อมก่อนที่จะ render
 */
