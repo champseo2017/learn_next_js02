@@ -2,14 +2,19 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import LoadingPage from "@/app/loading";
+import AddBook from "@/app/components/AddBook";
+import useMsgPack from "@/app/hooks/useMsgPack";
 
 const getBooks = async () => {
+  const { encodeMsgPack, decodeMsgPack } = useMsgPack();
   const res = await fetch("http://localhost:3000/api/books");
-  const json = await res.json();
-  return json;
+  const arrayBuffer = await res.arrayBuffer();
+  const decodedData = decodeMsgPack(arrayBuffer);
+  return decodedData;
 };
 
 const Books = () => {
+  const { encodeMsgPack, decodeMsgPack } = useMsgPack();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -19,6 +24,7 @@ const Books = () => {
       setBooks(books);
       setLoading(false);
     });
+    return () => {};
   }, []);
 
   if (loading) {
@@ -27,9 +33,15 @@ const Books = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  };
+    setLoading(true);
 
-  console.log("loadingloading", loading);
+    const res = await fetch(`/api/books/search?query=${query}`);
+    const arrayBuffer = await res.arrayBuffer();
+    const decodedBooks = decodeMsgPack(arrayBuffer);
+
+    setBooks(decodedBooks);
+    setLoading(false);
+  };
 
   return (
     <div>
@@ -45,6 +57,7 @@ const Books = () => {
           Search
         </button>
       </form>
+      <AddBook />
       <h1>Books</h1>
       {books.map((book) => (
         <div key={book.id}>
@@ -73,10 +86,5 @@ const Books = () => {
 export default Books;
 
 /* 
-เราจะทดสอบ form ของเราเพื่อให้แน่ใจว่ามันทำงานถูกต้อง ตอนแรกเมื่อเรารันแอพ ดูเหมือนว่าการอัพเดท state ทุกครั้งจะทำให้เกิดการโหลดหน้าเซิร์ฟเวอร์ ซึ่งเป็นเพราะเราใส่ async ไว้ใน Books component
-แต่ตอนนี้ Books component เป็น client component แล้ว เราจึงไม่จำเป็นต้องใช้ async อีกต่อไป และต้องเอาออก หลังจากนั้น form ของเราควรจะทำงานถูกต้อง เราสามารถลองพิมพ์ query ใน console เพื่อทดสอบได้
 
-การกำหนด async ให้กับ component เป็นวิธีการบอก Next.js ว่า component นี้เป็น server component ที่สามารถโหลดข้อมูลแบบ asynchronous ได้
-
-การโหลดข้อมูลแบบ Asynchronous: เมื่อเราใส่ async ไว้ เราสามารถใช้ await ภายใน component เพื่อรอการโหลดข้อมูลแบบ asynchronous เช่น การเรียก API หรือ query database โดยที่ component จะรอจนกว่าข้อมูลจะพร้อมก่อนที่จะ render
 */
