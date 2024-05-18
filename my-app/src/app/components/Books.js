@@ -46,6 +46,23 @@ const Books = () => {
     setLoading(false);
   };
 
+  // ฟังก์ชันสำหรับลบหนังสือ
+  const deleteBook = async (id) => {
+    const { encodeMsgPack, decodeMsgPack } = useMsgPack();
+
+    // เข้ารหัส id ด้วย MsgPack
+    const encodedId = encodeMsgPack({ id });
+
+    // ส่ง DELETE request ไปยัง API endpoint ของหนังสือตาม id ที่เข้ารหัสแล้ว
+    const res = await fetch(`api/books/${encodeURIComponent(encodedId)}`, {
+      method: "DELETE",
+      body: encodedId,
+    });
+
+    // หลังจากลบเสร็จ เรียกฟังก์ชัน fetchBooks เพื่อดึงข้อมูลหนังสือล่าสุด
+    fetchBooks();
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -75,7 +92,12 @@ const Books = () => {
                 <Link href={book.link} className="btn btn-primary">
                   See in Amazon
                 </Link>
-                <button className="btn btn-error">Delete</button>
+                <button
+                  onClick={() => deleteBook(book.id)}
+                  className="btn btn-error"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>
