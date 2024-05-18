@@ -3,7 +3,7 @@
 import { useState } from "react";
 import useMsgPack from "@/app/hooks/useMsgPack";
 
-const AddBook = () => {
+const AddBook = ({ refreshBooks }) => {
   const { encodeMsgPack, decodeMsgPack } = useMsgPack();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -29,6 +29,8 @@ const AddBook = () => {
     if (res.ok) {
       setNewBookTitle("");
       setModalOpen(false);
+      // เรียกเมธอด refreshBooks เมื่อเพิ่มหนังสือสำเร็จ
+      refreshBooks();
     }
   };
 

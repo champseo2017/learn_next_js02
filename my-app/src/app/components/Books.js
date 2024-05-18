@@ -19,11 +19,14 @@ const Books = () => {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
 
+  const fetchBooks = async () => {
+    const resBooks = await getBooks();
+    setBooks(resBooks);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    getBooks().then((books) => {
-      setBooks(books);
-      setLoading(false);
-    });
+    fetchBooks();
     return () => {};
   }, []);
 
@@ -57,7 +60,7 @@ const Books = () => {
           Search
         </button>
       </form>
-      <AddBook />
+      <AddBook refreshBooks={fetchBooks} />
       <h1>Books</h1>
       {books.map((book) => (
         <div key={book.id}>
