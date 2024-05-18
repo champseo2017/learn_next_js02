@@ -1,0 +1,24 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// สร้าง model Book สำหรับเก็บข้อมูลหนังสือ
+model Book {
+  // กำหนด id เป็น String และเป็น primary key โดยใช้ @id
+  // ใช้ @default(uuid()) เพื่อสร้าง unique identifier โดยอัตโนมัติ
+  id   String @id @default(uuid())
+  // กำหนด title เป็น String สำหรับเก็บชื่อหนังสือ
+  title String
+  // กำหนด link เป็น String สำหรับเก็บลิงก์ของหนังสือ
+  link String
+  // กำหนด img เป็น String สำหรับเก็บ URL ของรูปภาพหนังสือ
+  img String
+}
