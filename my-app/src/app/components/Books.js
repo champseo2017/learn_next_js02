@@ -21,6 +21,7 @@ const Books = () => {
 
   const fetchBooks = async () => {
     const resBooks = await getBooks();
+
     setBooks(resBooks);
     setLoading(false);
   };
@@ -59,8 +60,10 @@ const Books = () => {
       body: encodedId,
     });
 
-    // หลังจากลบเสร็จ เรียกฟังก์ชัน fetchBooks เพื่อดึงข้อมูลหนังสือล่าสุด
-    fetchBooks();
+    if (res.ok) {
+      // หลังจากลบเสร็จ เรียกฟังก์ชัน fetchBooks เพื่อดึงข้อมูลหนังสือล่าสุด
+      fetchBooks();
+    }
   };
 
   return (
